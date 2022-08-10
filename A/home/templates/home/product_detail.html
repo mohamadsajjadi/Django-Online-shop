@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <p>{{ products.created }}</p><br>
+    <p>{{ products.price }} $</p>
+    <div class="card" style="width: 18rem;">
+        <img src="{{ products.image.url }}" class="card-img-top col" alt="...">
+    </div>
+{% endblock %}
