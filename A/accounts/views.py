@@ -44,8 +44,6 @@ class UserVerifyCodeView(View):
     def post(self, request):
         user_session = request.session['user_registration_info']
         form = self.form_class(request.POST)
-        print(OtpCode.objects.all())
-        print('=' * 90)
         otp_code = OtpCode.objects.get(phone_number=user_session['phone_number'])
         if form.is_valid():
             cd = form.cleaned_data
