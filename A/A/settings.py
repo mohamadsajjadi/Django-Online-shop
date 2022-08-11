@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
     'home.apps.HomeConfig',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -117,6 +118,15 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Arvan Cloud Service
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = '96911067-a48f-41d9-938b-57b52f98f0da'
+AWS_SECRET_ACCESS_KEY = '8f6e70b53035b78ab017f94627502c20b39c8aa1f973c4ebf5ff683c74d9299e'
+AWS_STORAGE_BUCKET_NAME = 'django-shops'
+AWS_S3_ENDPOINT_URL = 'https://s3.ir-thr-at1.arvanstorage.com'
+AWS_SERVICE_NAME = 's3'
+AWS_S3_FILE_OVERWRITE = False
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
