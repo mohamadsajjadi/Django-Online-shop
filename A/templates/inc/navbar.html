@@ -9,6 +9,9 @@
                 <a class="nav-link active" aria-current="page" href="{% url 'accounts:user_login' %}">Login</a>
                 <a class="nav-link active" aria-current="page" href="{% url 'accounts:user_register' %}">Register</a>
             {% endif %}
+            {% if request.user.is_admin %}
+                <a class="nav-link active" aria-current="page" href="{% url 'home:bucket' %}">Bucket</a>
+            {% endif %}
         </div>
     </div>
 </nav>
