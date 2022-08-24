@@ -1,7 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.contrib import messages
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from .models import Product
-from .tasks import all_bucket_object_task
+from . import tasks
 
 
 class HomeView(View):
@@ -18,5 +19,12 @@ class ProductDetailView(View):
 
 class BucketHomeView(View):
     def get(self, request):
-        objects = all_bucket_object_task()
+        objects = tasks.all_bucket_object_task()
         return render(request, 'home/bucket.html', {'objects': objects})
+
+
+class DeleteObjectBucketView(View):
+    def get(self, request, key):
+        tasks.delete_obj_bucket.delay(key)
+        messages.success(request, 'the objects will be deleted soon!', 'info')
+        return redirect('home:bucket')
