@@ -5,6 +5,7 @@ from .models import OtpCode, User
 from utils import send_otp_code
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 import random
 
 
@@ -22,7 +23,6 @@ class UserRegisterView(View):
             random_code = random.randint(1000, 9999)
             send_otp_code(phone_number=form.cleaned_data['phone_number'], code=random_code)
             OtpCode.objects.create(phone_number=form.cleaned_data['phone_number'], code=random_code)
-            # print(code.code)
             request.session['user_registration_info'] = {
                 'phone_number': form.cleaned_data['phone_number'],
                 'email': form.cleaned_data['email'],
@@ -91,7 +91,7 @@ class UserLoginView(View):
         return render(request, self.template_name, {'form': form})
 
 
-class UserLogoutView(View):
+class UserLogoutView(LoginRequiredMixin, View):
     def get(self, request):
         logout(request)
         messages.success(request, 'Logout successfully!', 'success')
