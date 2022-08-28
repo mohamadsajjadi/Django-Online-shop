@@ -9,7 +9,7 @@ from utils import UserIsAdminMixin
 class HomeView(View):
     def get(self, request, category_slug=None):
         product = Product.objects.filter(available=True)
-        categories = Category.objects.all()
+        categories = Category.objects.filter(is_sub=False)
         if category_slug:
             category = Category.objects.get(slug=category_slug)
             product = product.filter(category=category)
