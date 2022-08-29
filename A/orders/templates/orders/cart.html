@@ -1,31 +1,37 @@
 {% extends 'base.html' %}
 {% block content %}
     <table class="table table-dark table-striped">
+
         <thead>
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
+            <th scope="col">{{ forloop.counter }}</th>
+            <th scope="col">Name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Unit Price</th>
+            <th scope="col">Total Price</th>
+            <th colspan="4"></th>
         </tr>
         </thead>
         <tbody>
+
+        {% for cart in carts %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td><a href="{% url 'home:product_detail' cart.product_obj.slug %}">{{ cart.name }}</a></td>
+                <td>{{ cart.quantity }}</td>
+                <td>{{ cart.Price }}</td>
+                <td>{{ cart.Total_Price }}</td>
+                <td><a href="{% url 'orders:delete_cart' cart.product_obj.id %}">remove</a></td>
+            </tr>
+        {% endfor %}
+        <br>
         <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
+            <td>Total price</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{ carts.get_total_price }}</td>
+            <td></td>
         </tr>
         </tbody>
     </table>

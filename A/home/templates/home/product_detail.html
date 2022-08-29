@@ -8,5 +8,11 @@
         <img src="{{ products.image.url }}" class="card-img-top col" alt="...">
     </div><br>
     <p>{{ products.description }}</p>
+    <br>
+        <form action="{% url 'orders:add_cart' products.id %}" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="add to cart">
+        </form>
 
 {% endblock %}
