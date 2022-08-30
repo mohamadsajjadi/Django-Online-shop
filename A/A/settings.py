@@ -36,12 +36,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #Local apps
+    # Local apps
     'accounts.apps.AccountsConfig',
     'home.apps.HomeConfig',
     'orders.apps.OrdersConfig',
-    
-    #Third_party apps
+
+    # Third_party apps
     'storages',
     'django_extensions',
     'django_celery_beat',
@@ -70,6 +70,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'orders.context_processors.cart',
+                'home.context_processors.product_slug',
             ],
         },
     },
