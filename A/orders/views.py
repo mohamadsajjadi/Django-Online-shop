@@ -1,9 +1,11 @@
+import datetime
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from home.models import Product
-from .forms import CartQuantityForm
+from .forms import CartQuantityForm, CouponCode
 from .cart import Cart
-from .models import Order, OrderItem
+from .models import Order, OrderItem, Coupon
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
@@ -33,12 +35,15 @@ class DeleteCartView(View):
 
 
 class OrderDetailView(LoginRequiredMixin, View):
+    form_class = CouponCode
+
     def get(self, request, order_id):
         order = get_object_or_404(Order, id=order_id)
-        return render(request, 'orders/order.html', {'order': order})
+        return render(request, 'orders/order.html', {'order': order, 'form': self.form_class})
 
 
 class OrderCreateView(LoginRequiredMixin, View):
+
     def get(self, request):
         cart = Cart(request)
         order_queryset = Order.objects.filter(user=request.user).exists()
@@ -52,3 +57,20 @@ class OrderCreateView(LoginRequiredMixin, View):
                                          quantity=item['quantity'])
             # cart.clear()  # Whenever you config the ZarinPal pay system, you must uncomment this.
         return redirect('orders:order_detail', order.id)
+
+
+class CouponCodeView(LoginRequiredMixin, View):
+    def post(self, request, order_id):
+        now = datetime.datetime.now()
+        form = CouponCode(request.POST)
+        if form.is_valid():
+            code = form.cleaned_data['code']
+            try:
+                coupon = Coupon.objects.get(code__exact=code, valid_from__lte=now, valid_to__gte=now, active=True)
+            except Coupon.DoesNotExist:
+                messages.error(request, "we could not find this code or maybe this code has expired.", 'danger')
+                return redirect('orders:order_detail', order_id)
+            order = Order.objects.get(id=order_id)
+            order.discount_amount = coupon.discount_amount
+            order.save()
+        return redirect('orders:order_detail', order_id)
