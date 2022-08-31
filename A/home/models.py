@@ -31,5 +31,8 @@ class Product(models.Model):
     class Meta:
         ordering = ('name',)
 
+    def __str__(self):
+        return self.name
+
     def get_absolute_url(self):
         return reverse('home:product_detail', args=[self.slug])

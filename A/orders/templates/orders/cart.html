@@ -17,7 +17,7 @@
         {% for cart in carts %}
             <tr>
                 <th scope="row">{{ forloop.counter }}</th>
-                <td><a href="{% url 'home:product_detail' product.slug %}">{{ cart.name }}</a></td>
+                <td><a href="{% url 'home:product_detail' cart.product.slug %}">{{ cart.product.name }}</a></td>
                 <td>{{ cart.quantity }}</td>
                 <td>{{ cart.Price }}</td>
                 <td>{{ cart.Total_Price }}</td>
@@ -35,4 +35,5 @@
         </tr>
         </tbody>
     </table>
+    <a href="{% url 'orders:order_create' %}" class="btn btn-info">Checkout</a>
 {% endblock %}

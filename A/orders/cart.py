@@ -16,7 +16,7 @@ class Cart:
         products = Product.objects.filter(id__in=product_ids)
         cart = self.cart.copy()
         for product in products:
-            cart[str(product.id)]['name'] = product.name
+            cart[str(product.id)]['product'] = product
 
         for item in cart.values():
             item['Total_Price'] = int(item["Price"]) * item['quantity']
@@ -40,6 +40,10 @@ class Cart:
 
     def get_total_price(self):
         return sum(int(item['Price']) * item['quantity'] for item in self.cart.values())
+
+    def clear(self):
+        del self.session[CART_SESSION_ID]
+        self.save()
 
     def __len__(self):
         return sum(item['quantity'] for item in self.cart.values())
